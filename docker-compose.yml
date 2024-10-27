@@ -1,12 +1,39 @@
 version: '3.8'
 
 services:
+  mongodb:
+    image: mongo:latest
+    container_name: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: sharebill
+      MONGO_INITDB_ROOT_PASSWORD: sharebill_pass
+    volumes:
+      - sharebill_mongo_data:/data/db
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: backend
+    environment:
+      PORT: 5000
+      MONGODB_URI: "mongodb://root:example@mongodb:27017/?authSource=admin"
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongodb
+
   frontend:
     build:
-      context: .
+      context: ./frontend
       dockerfile: Dockerfile
     container_name: frontend
-    env_file:
-      - .env
+    environment:
+      NEXT_PUBLIC_API_BASE_URL: "http://backend:5000/api"
     ports:
       - "3000:3000"
+    depends_on:
+      - backend
+
+volumes:
+  sharebill_mongo_data:
