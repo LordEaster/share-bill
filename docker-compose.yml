@@ -3,7 +3,7 @@ version: '3.8'
 services:
   mongodb:
     image: mongo:latest
-    container_name: mongo
+    container_name: sharebill_mongo
     environment:
       MONGO_INITDB_ROOT_USERNAME: sharebill
       MONGO_INITDB_ROOT_PASSWORD: sharebill_pass
@@ -14,12 +14,12 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: backend
+    container_name: sharebill_backend
     environment:
-      PORT: 5000
-      MONGODB_URI: "mongodb://root:example@mongodb:27017/?authSource=admin"
+      PORT: 5050
+      MONGODB_URI: "mongodb://sharebill:sharebill_pass@mongodb:27017/?authSource=admin"
     ports:
-      - "5000:5000"
+      - "5050:5050"
     depends_on:
       - mongodb
 
@@ -27,9 +27,9 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: frontend
+    container_name: sharebill_frontend
     environment:
-      NEXT_PUBLIC_API_BASE_URL: "http://backend:5000/api"
+      NEXT_PUBLIC_API_BASE_URL: "http://sharebill_backend:5050/api"
     ports:
       - "3000:3000"
     depends_on:
