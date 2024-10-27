@@ -1,39 +1,24 @@
 version: '3.8'
 
 services:
-  mongodb:
-    image: mongo:latest
-    container_name: sharebill_mongo
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: sharebill
-      MONGO_INITDB_ROOT_PASSWORD: sharebill_pass
-    volumes:
-      - sharebill_mongo_data:/data/db
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    platform: linux/amd64
+    image: share-bill-frontend
+    ports:
+      - "3000:3000"
 
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: sharebill_backend
-    environment:
-      PORT: 5050
-      MONGODB_URI: "mongodb://sharebill:sharebill_pass@mongodb:27017/?authSource=admin"
+    platform: linux/amd64
+    image: share-bill-backend
     ports:
       - "5050:5050"
-    depends_on:
-      - mongodb
 
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    container_name: sharebill_frontend
-    environment:
-      NEXT_PUBLIC_API_BASE_URL: "http://sharebill_backend:5050/api"
-    ports:
-      - "3000:3000"
-    depends_on:
-      - backend
-
-volumes:
-  sharebill_mongo_data:
+  mongodb:
+    image: mongo:latest
+    platform: linux/amd64

@@ -1,4 +1,4 @@
-# Use Node.js 18 as the base image
+# Use Node.js as the base image
 FROM node:18
 
 # Set the working directory
@@ -10,10 +10,10 @@ COPY package*.json ./
 # Install dependencies
 RUN npm install
 
-# Copy the source code to the container
+# Copy all files, including `lib`, `components`, and `pages` directories
 COPY . .
 
-# Build the Next.js application
+# Run the Next.js build command
 RUN npm run build
 
 # Expose the frontend port
