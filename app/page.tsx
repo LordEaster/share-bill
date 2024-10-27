@@ -195,7 +195,7 @@ export default function Home() {
             <div className="max-w-4xl mx-auto space-y-8">
                 <div className="text-center space-y-2">
                     <div className="flex items-center justify-between mb-4">
-                        <h1 className="text-4xl font-bold">Split the Bill</h1>
+                        <h1 className="text-4xl font-bold">Share Bill</h1>
                         <ShareButton sessionId={sessionId ?? ''} />
                     </div>
                     <p className="text-muted-foreground">
