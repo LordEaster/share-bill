@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Friend } from "@/types";
+import { Friend } from "../types";
 import { Plus, Trash2, Users, Copy } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";

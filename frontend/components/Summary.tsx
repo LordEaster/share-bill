@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Friend, DebtCalculation } from "@/types";
+import { Friend, DebtCalculation } from "../types";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { ScrollArea } from "./ui/scroll-area";
 import { ArrowRight, Calculator } from "lucide-react";

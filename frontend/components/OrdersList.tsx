@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Friend, OrderItem } from "@/types";
+import { Friend, OrderItem } from "../types";
 import { Plus, Trash2, Receipt } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
