@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { Friend, DebtCalculation } from "../types";
 import { ScrollArea } from "./ui/scroll-area";
 import { ArrowRight, Calculator } from "lucide-react";
@@ -12,6 +12,21 @@ interface SummaryProps {
 }
 
 export function Summary({ friends, debts, calculateShare }: SummaryProps) {
+  // Track the "paid" status for each debt
+  const [paidDebts, setPaidDebts] = useState<Set<number>>(new Set());
+
+  const togglePaidStatus = (index: number) => {
+    setPaidDebts((prevPaidDebts) => {
+      const updatedPaidDebts = new Set(prevPaidDebts);
+      if (updatedPaidDebts.has(index)) {
+        updatedPaidDebts.delete(index); // Mark as unpaid if already paid
+      } else {
+        updatedPaidDebts.add(index); // Mark as paid if unpaid
+      }
+      return updatedPaidDebts;
+    });
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-2">
@@ -52,10 +67,15 @@ export function Summary({ friends, debts, calculateShare }: SummaryProps) {
           {debts.map((debt, index) => {
             const fromFriend = friends.find((f) => f.id === debt.from);
             const toFriend = friends.find((f) => f.id === debt.to);
+            const isPaid = paidDebts.has(index);
+
             return (
               <div
                 key={index}
-                className="flex items-center justify-between p-3 rounded-lg bg-gray-50 mb-2 border"
+                onClick={() => togglePaidStatus(index)}
+                className={`flex items-center justify-between p-3 rounded-lg bg-gray-50 mb-2 border cursor-pointer ${
+                  isPaid ? "line-through text-gray-500" : ""
+                }`}
               >
                 <div className="flex items-center gap-2">
                   <span className="font-medium">{fromFriend?.name}</span>
