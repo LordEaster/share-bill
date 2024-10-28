@@ -17,6 +17,17 @@ export default function Home() {
     const [sessionId, setSessionId] = useState<string | null>(null);
     const router = useRouter();
 
+    function generateUUID() {
+        if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+            return crypto.randomUUID();
+        }
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+            const r = (Math.random() * 16) | 0,
+                v = c === 'x' ? r : (r & 0x3) | 0x8;
+            return v.toString(16);
+        });
+    }
+
     // Load data on the first render
     useEffect(() => {
         const searchParams = new URLSearchParams(window.location.search);
@@ -24,7 +35,7 @@ export default function Home() {
     
         if (!sessionIdFromUrl) {
             // Generate new sessionId if one does not exist
-            sessionIdFromUrl = crypto.randomUUID();
+            sessionIdFromUrl = generateUUID();
             router.replace(`/?sessionId=${sessionIdFromUrl}`, undefined);
         }
     
@@ -66,7 +77,7 @@ export default function Home() {
     const addFriend = (name: string, paymentAddress?: string) => {
         setFriends([
             ...friends,
-            { id: crypto.randomUUID(), name, paid: false, paymentAddress },
+            { id: generateUUID(), name, paid: false, paymentAddress },
         ]);
     };
 
@@ -82,7 +93,7 @@ export default function Home() {
         setOrders([
             ...orders,
             {
-                id: crypto.randomUUID(),
+                id: generateUUID(),
                 description,
                 amount,
                 paidBy,
@@ -191,41 +202,51 @@ export default function Home() {
     };
 
     return (
-        <main className="min-h-screen bg-gradient-to-b from-background to-muted p-6">
-            <div className="max-w-4xl mx-auto space-y-8">
+        <main className="min-h-screen bg-gradient-to-b from-background to-muted p-4 sm:p-6">
+            <div className="max-w-4xl mx-auto space-y-6 sm:space-y-8">
                 <div className="text-center space-y-2">
-                    <div className="flex items-center justify-between mb-4">
-                        <h1 className="text-4xl font-bold">Share Bill</h1>
+                    <div className="flex flex-col sm:flex-row items-center justify-between mb-4 space-y-2 sm:space-y-0">
+                        <h1 className="text-3xl sm:text-4xl font-bold">Share Bill</h1>
                         <ShareButton sessionId={sessionId ?? ''} />
                     </div>
-                    <p className="text-muted-foreground">
+                    <p className="text-sm sm:text-base text-muted-foreground">
                         Easy bill sharing with friends
                     </p>
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-6">
-                    <FriendsList
-                        friends={friends}
-                        onAddFriend={addFriend}
-                        onDeleteFriend={deleteFriend}
-                        onTogglePaid={togglePaid}
-                        onUpdatePaymentAddress={updatePaymentAddress}
-                        calculateShare={calculateShare}
-                    />
+                {/* Card wrapper with minimal styling */}
+                <div className="space-y-6 md:space-y-0 md:grid md:grid-cols-2 md:gap-6">
+                    {/* Friends section with outer card styling */}
+                    <div className="border p-4 rounded-lg shadow-sm bg-white">
+                        <FriendsList
+                            friends={friends}
+                            onAddFriend={addFriend}
+                            onDeleteFriend={deleteFriend}
+                            onTogglePaid={togglePaid}
+                            onUpdatePaymentAddress={updatePaymentAddress}
+                            calculateShare={calculateShare}
+                        />
+                    </div>
 
-                    <OrdersList
-                        orders={orders}
-                        friends={friends}
-                        onAddOrder={addOrder}
-                        onDeleteOrder={deleteOrder}
-                        onToggleFriendAssignment={toggleFriendAssignment}
-                    />
+                    {/* Orders section with outer card styling */}
+                    <div className="border p-4 rounded-lg shadow-sm bg-white">
+                        <OrdersList
+                            orders={orders}
+                            friends={friends}
+                            onAddOrder={addOrder}
+                            onDeleteOrder={deleteOrder}
+                            onToggleFriendAssignment={toggleFriendAssignment}
+                        />
+                    </div>
 
-                    <Summary
-                        friends={friends}
-                        debts={calculateDebts()}
-                        calculateShare={calculateShare}
-                    />
+                    {/* Summary section with outer card styling */}
+                    <div className="md:col-span-2 border p-4 rounded-lg shadow-sm bg-white">
+                        <Summary
+                            friends={friends}
+                            debts={calculateDebts()}
+                            calculateShare={calculateShare}
+                        />
+                    </div>
                 </div>
             </div>
         </main>
