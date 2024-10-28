@@ -7,10 +7,10 @@ services:
       dockerfile: Dockerfile
     platform: linux/amd64
     env_file:
-      - ./frontend/.env
+      - ./frontend/.env.prod
     image: share-bill-frontend
     ports:
-      - "3000:3000"
+      - "5051:3000"
 
   backend:
     build:
@@ -18,7 +18,7 @@ services:
       dockerfile: Dockerfile
     platform: linux/amd64
     env_file:
-      - ./backend/.env
+      - ./backend/.env.prod
     image: share-bill-backend
     ports:
       - "5050:5050"
