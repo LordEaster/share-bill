@@ -6,6 +6,8 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     platform: linux/amd64
+    env_file:
+      - ./frontend/.env.prod
     image: share-bill-frontend
     ports:
       - "3000:3000"
@@ -15,10 +17,8 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     platform: linux/amd64
+    env_file:
+      - ./backend/.env.prod
     image: share-bill-backend
     ports:
       - "5050:5050"
-
-  mongodb:
-    image: mongo:latest
-    platform: linux/amd64
