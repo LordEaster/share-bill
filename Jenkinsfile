@@ -30,7 +30,19 @@ pipeline{
                 }
             }
         }
-
+        stage("Code analysis"){
+            steps{
+                withCredentials([string(credentialsId: 'share-bill', variable: 'SONAR_TOKEN')]) {
+                    sh '''
+                        npm install sonar-scanner
+                        npx sonar-scanner \
+                        -Dsonar.projectKey=share-bill \
+                        -Dsonar.host.url=http://sonarqube-dso-demo:9000 \
+                        -Dsonar.login=$SONAR_TOKEN
+                    '''
+                }
+            }
+        }
         stage("Docker deployment"){
             steps{
                 sh 'docker-compose -p share-bill -f docker-compose.prod.yml build --no-cache'
