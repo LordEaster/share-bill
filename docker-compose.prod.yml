@@ -9,7 +9,7 @@ services:
     environment:
       NEXT_PUCLIC_API_BASE_URL:
     env_file:
-      - ./frontend/.env.prod
+      - ./frontend/.env
     image: share-bill-frontend
     ports:
       - "5051:3000"
@@ -23,7 +23,7 @@ services:
       MONGO_URI:
       PORT:
     env_file:
-      - ./backend/.env.prod
+      - ./backend/.env
     image: share-bill-backend
     ports:
       - "5050:5050"
