@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     platform: linux/amd64
     environment:
-      - NEXT_PUCLIC_API_BASE_URL
+      NEXT_PUCLIC_API_BASE_URL:
     env_file:
       - ./frontend/.env.prod
     image: share-bill-frontend
@@ -20,8 +20,8 @@ services:
       dockerfile: Dockerfile
     platform: linux/amd64
     environment:
-      - MONGO_URI
-      - PORT
+      MONGO_URI:
+      PORT:
     env_file:
       - ./backend/.env.prod
     image: share-bill-backend
