@@ -13,6 +13,7 @@ services:
     image: share-bill-frontend
     ports:
       - "5051:3000"
+    restart: unless-stopped
 
   backend:
     build:
@@ -27,3 +28,4 @@ services:
     image: share-bill-backend
     ports:
       - "5050:5050"
+    restart: unless-stopped
