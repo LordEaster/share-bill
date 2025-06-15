@@ -3,11 +3,18 @@
 import { useState, useEffect } from "react";
 import { useRouter } from 'next/navigation';
 import { Friend, OrderItem, DebtCalculation } from "../types";
-import { FriendsList } from "../components/FriendsList";
-import { OrdersList } from "../components/OrdersList";
+import { FriendsList } from "../components/Friends";
+import { Orders } from "../components/Orders";
 import { Summary } from "../components/Summary";
 import { ShareButton } from "../components/ShareButton";
 import { toast } from "sonner";
+import {
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle,
+} from "../components/ui/card";
+
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -205,50 +212,58 @@ export default function Home() {
         <main className="min-h-screen bg-gradient-to-b from-background to-muted p-4 sm:p-6">
             <div className="max-w-4xl mx-auto space-y-6 sm:space-y-8">
                 <div className="text-center space-y-2">
-                    <div className="flex flex-col sm:flex-row items-center justify-between mb-4 space-y-2 sm:space-y-0">
-                        <h1 className="text-3xl sm:text-4xl font-bold">Share Bill</h1>
-                        <ShareButton sessionId={sessionId ?? ''} />
-                    </div>
-                    <p className="text-sm sm:text-base text-muted-foreground">
-                        Easy bill sharing with friends
-                    </p>
+                <div className="flex flex-col sm:flex-row items-center justify-between mb-4 space-y-2 sm:space-y-0">
+                    <h1 className="text-3xl sm:text-4xl font-bold">Share Bill</h1>
+                    <ShareButton sessionId={sessionId ?? ""} />
+                </div>
+                <p className="text-sm sm:text-base text-muted-foreground">
+                    Easy bill sharing with friends
+                </p>
                 </div>
 
-                {/* Card wrapper with minimal styling */}
                 <div className="space-y-6 md:space-y-0 md:grid md:grid-cols-2 md:gap-6">
-                    {/* Friends section with outer card styling */}
-                    <div className="border p-4 rounded-lg shadow-sm bg-white">
-                        <FriendsList
-                            friends={friends}
-                            onAddFriend={addFriend}
-                            onDeleteFriend={deleteFriend}
-                            onTogglePaid={togglePaid}
-                            onUpdatePaymentAddress={updatePaymentAddress}
-                            calculateShare={calculateShare}
-                        />
-                    </div>
+                {/* Friends List */}
+                <Card>
+                    <CardHeader>
+                    <CardTitle>Friends</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                    <FriendsList
+                        friends={friends}
+                        onAddFriend={addFriend}
+                        onDeleteFriend={deleteFriend}
+                        onTogglePaid={togglePaid}
+                        onUpdatePaymentAddress={updatePaymentAddress}
+                        calculateShare={calculateShare}
+                    />
+                    </CardContent>
+                </Card>
 
-                    {/* Orders section with outer card styling */}
-                    <div className="border p-4 rounded-lg shadow-sm bg-white">
-                        <OrdersList
-                            orders={orders}
-                            friends={friends}
-                            onAddOrder={addOrder}
-                            onDeleteOrder={deleteOrder}
-                            onToggleFriendAssignment={toggleFriendAssignment}
-                        />
-                    </div>
+                {/* Orders */}
+                <Orders
+                    orders={orders}
+                    friends={friends}
+                    onAddOrder={addOrder}
+                    onDeleteOrder={deleteOrder}
+                    onToggleFriendAssignment={toggleFriendAssignment}
+                />
 
-                    {/* Summary section with outer card styling */}
-                    <div className="md:col-span-2 border p-4 rounded-lg shadow-sm bg-white">
-                        <Summary
-                            friends={friends}
-                            debts={calculateDebts()}
-                            calculateShare={calculateShare}
-                        />
-                    </div>
+                {/* Summary */}
+                <Card className="md:col-span-2">
+                    <CardHeader>
+                    <CardTitle>Summary</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                    <Summary
+                        friends={friends}
+                        debts={calculateDebts()}
+                        calculateShare={calculateShare}
+                    />
+                    </CardContent>
+                </Card>
                 </div>
             </div>
-        </main>
+            </main>
+
     );
 }
