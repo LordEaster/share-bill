@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import Session, { ISession } from '../models/Session';
+import Session from '../models/Session';
 
 const router = express.Router();
 
@@ -10,7 +10,7 @@ router.get('/:sessionId', async (req: Request, res: Response) => {
     try {
         let session = await Session.findOne({ sessionId });
         if (!session) {
-        session = new Session({ sessionId, friends: [], orders: [] });
+        session = new Session();
         await session.save();
         }
         res.status(200).json({ friends: session.friends, orders: session.orders });
